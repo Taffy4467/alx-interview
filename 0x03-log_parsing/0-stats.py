@@ -2,7 +2,6 @@
 """Log Parser"""
 import sys
 
-
 if __name__ == '__main__':
     file_size = [0]
     status_codes = {200: 0, 301: 0, 400: 0, 401: 0,
@@ -18,7 +17,7 @@ if __name__ == '__main__':
     def parse_line(line):
         """ Checks the line for matches """
         try:
-            line = line[:-1]
+            line = line.strip()
             word = line.split(' ')
             # File size is last parameter on stdout
             file_size[0] += int(word[-1])
@@ -34,12 +33,12 @@ if __name__ == '__main__':
     try:
         for line in sys.stdin:
             parse_line(line)
-            """ print after every 10 lines """
+            # print after every 10 lines
             if linenum % 10 == 0:
                 print_stats()
             linenum += 1
     except KeyboardInterrupt:
         print_stats()
         raise
-print_stats()
+    print_stats()
 

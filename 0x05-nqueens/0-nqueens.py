@@ -1,52 +1,40 @@
 #!/usr/bin/python3
 '''N Queens Challenge'''
 
-import sys
+def checks(board, row, col):
 
-if len(sys.argv) != 2:
-    print('Usage: nqueens N')
-    exit(1)
-
-try:
-    n_q = int(sys.argv[1])
-except ValueError:
-    print('N must ba a number')
-    exit(1)
-
-if n_q < 4:
-    print('N must ba at least 4')
-    exit(1)
-
-
-def solve_nqueens(n):
-    ''' self descriptive '''
-    if n == 0:
-        return [[]]
-    inner_solution = solve_nqueens(n - 1)
-    return [solution + [(n, i + 1)]
-            for i in range(n_q)
-            for solution in inner_solution
-            if safe_queen((n, i + 1), solution)]
-
-
-def attack_queen(square, queen):
-    '''self descriptive'''
-    (row1, col1) = square
-    (row2, col2) = queen
-    return (row1 == row2) or (col1 == col2) or\
-        abs(row1 - row2) == abs(col1 - col2)
-
-
-def safe_queen(sqr, queens):
-    '''self descriptive'''
-    for queen in queens:
-        if attack_queen(sqr, queen):
+    for i in range(col):
+        if board[i] is row or abs(board[i] - row) is abs(i - col):
             return False
     return True
 
 
-for answer in reversed(solve_nqueens(n_q)):
-    result = []
-    for p in [list(p) for p in answer]:
-        result.append([i - 1 for i in p])
-    print(result)
+def cboard(board, col):
+
+    size = len(board)
+    if col is size:
+        print(str([[i, board[i]] for i in range(size)]))
+        return
+    for n in range(size):
+        if checks(board, n, col):
+            board[col] = n
+            cboard(board, col + 1)
+
+
+if __name__ == "__main__":
+    import sys
+
+    if len(sys.argv) != 2:
+        print("Usage: nqueens N")
+        sys.exit(1)
+    n = 0
+    try:
+        n = int(sys.argv[1])
+    except ValueError:
+        print("N must be a number")
+        sys.exit(1)
+    if n < 4:
+        print("N must be at least 4")
+        sys.exit(1)
+    board = [0 for col in range(n)]
+    cboard(board, 0)

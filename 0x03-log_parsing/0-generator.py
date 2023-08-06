@@ -1,4 +1,7 @@
 #!/usr/bin/python3
+"""
+Random log generator for log parsing test.
+"""
 import random
 import sys
 from time import sleep

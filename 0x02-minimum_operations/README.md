@@ -1,5 +1,15 @@
-0x02-minimum_operations
-
+0x02. Minimum Operations
+Algorithm
+Python
+ By: Carrie Ybay, Software Engineer at Holberton School
+ Weight: 1
+ Project over - took place from Jul 10, 2023 6:00 AM to Jul 14, 2023 6:00 AM
+ An auto review will be launched at the deadline
+In a nutshell…
+Auto QA review: 12.0/12 mandatory
+Altogether:  100.0%
+Mandatory: 100.0%
+Optional: no optional tasks
 Requirements
 General
 Allowed editors: vi, vim, emacs
@@ -10,3 +20,45 @@ A README.md file, at the root of the folder of the project, is mandatory
 Your code should be documented
 Your code should use the PEP 8 style (version 1.7.x)
 All your files must be executable
+Tasks
+0. Minimum Operations
+mandatory
+Score: 100.0% (Checks completed: 100.0%)
+In a text file, there is a single character H. Your text editor can execute only two operations in this file: Copy All and Paste. Given a number n, write a method that calculates the fewest number of operations needed to result in exactly n H characters in the file.
+
+Prototype: def minOperations(n)
+Returns an integer
+If n is impossible to achieve, return 0
+Example:
+
+n = 9
+
+H => Copy All => Paste => HH => Paste =>HHH => Copy All => Paste => HHHHHH => Paste => HHHHHHHHH
+
+Number of operations: 6
+
+carrie@ubuntu:~/0x02-minoperations$ cat 0-main.py
+#!/usr/bin/python3
+"""
+Main file for testing
+"""
+
+minOperations = __import__('0-minoperations').minOperations
+
+n = 4
+print("Min # of operations to reach {} char: {}".format(n, minOperations(n)))
+
+n = 12
+print("Min # of operations to reach {} char: {}".format(n, minOperations(n)))
+
+carrie@ubuntu:~/0x02-minoperations$
+carrie@ubuntu:~/0x02-minoperations$ ./0-main.py
+Min number of operations to reach 4 characters: 4
+Min number of operations to reach 12 characters: 7
+carrie@ubuntu:~/0x02-minoperations$
+Repo:
+
+GitHub repository: alx-interview
+Directory: 0x02-minimum_operations
+File: 0-minoperations.py
+   

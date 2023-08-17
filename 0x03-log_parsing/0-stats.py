@@ -1,59 +1,44 @@
 #!/usr/bin/python3
-"""
-Reads stdin line by line and computes metrics.
-Input format: <IP Address> - [<date>] "GET /projects/260 HTTP/1.1"
-<status code> <file size>
-Return status codes in ascending order
-"""
-
+"""Log Parser"""
 import sys
-from collections import defaultdict
-from typing import Dict, Tuple
 
-def print_stats(total_size: int, status_counts: Dict[int, int]) -> None:
-    """
-    Print the computed statistics.
-    """
-    print("File size:", total_size)
-    for status_code, count in sorted(status_counts.items()):
-        print(f"{status_code}: {count}")
 
-def parse_line(line: str) -> Tuple[int, int]:
-    """
-    Parse the line and extract file size and status code.
-    """
-    parts = line.strip().split()
-    if len(parts) < 8 or parts[-4] != "GET" or not parts[-2].isdigit():
-        return None, None
+if __name__ == '__main__':
+    file_size = [0]
+    status_codes = {200: 0, 301: 0, 400: 0, 401: 0,
+                    403: 0, 404: 0, 405: 0, 500: 0}
 
-    status_code = int(parts[-2])
-    file_size = int(parts[-1])
-    return status_code, file_size
+    def print_stats():
+        """ Print statistics """
+        print('File size: {}'.format(file_size[0]))
+        for key in sorted(status_codes.keys()):
+            if status_codes[key]:
+                print('{}: {}'.format(key, status_codes[key]))
 
-def main() -> None:
-    """
-    Main function to compute metrics.
-    """
-    total_size = 0
-    status_counts = defaultdict(int)
+    def parse_line(line):
+        """ Checks the line for matches """
+        try:
+            line = line[:-1]
+            word = line.split(' ')
+            # File size is last parameter on stdout
+            file_size[0] += int(word[-1])
+            # Status code comes before file size
+            status_code = int(word[-2])
+            # Move through dictionary of status codes
+            if status_code in status_codes:
+                status_codes[status_code] += 1
+        except BaseException:
+            pass
 
+    linenum = 1
     try:
-        for line_counter, line in enumerate(sys.stdin, 1):
-            status_code, file_size = parse_line(line)
-            if status_code is not None and file_size is not None:
-                total_size += file_size
-                status_counts[status_code] += 1
-
-            if line_counter % 10 == 0:
-                print_stats(total_size, status_counts)
-
+        for line in sys.stdin:
+            parse_line(line)
+            """ print after every 10 lines """
+            if linenum % 10 == 0:
+                print_stats()
+            linenum += 1
     except KeyboardInterrupt:
-        # Print final statistics before terminating on KeyboardInterrupt
-        print_stats(total_size, status_counts)
-        sys.exit(0)
-
-    # Print final statistics if the loop ends without KeyboardInterrupt
-    print_stats(total_size, status_counts)
-
-if __name__ == "__main__":
-    main()
+        print_stats()
+        raise
+    print_stats()
